@@ -735,4 +735,136 @@ console.log(map.get('age')); // Output: undefined
 2. Try accessing the values with both the original keys and new references that look the same.  
 3. Add a key-value pair using a string, then try to access a nonexistent key.
 
-When you're done, type **"done"** and then **"next"** to move on! 😊
+```js
+    const data = new Map()
+
+    const animal1 = {name: 'octopus'}
+    const cars = ['mercedes', 'toyota', 'bugatti']
+
+    const funckobject = () => {};
+
+    data.set(animal1, 'aquatic animals');
+    data.set(cars, 'list of cars');
+    data.set(funckobject, 'oject function');
+
+
+    console.log(data.get(['mercedes', 'toyota', 'bugatti'])); // Undefined because this is a new reference
+
+    console.log(data.get(animal1));
+    console.log(data.get( funckobject))
+
+```
+### Key Concept:
+
+- Objects, arrays, and functions in JavaScript are compared by reference, not by their content.
+- Same reference means it points to the exact same object in memory.
+- Different references mean they are considered as different objects, even if they have the same content.
+
+
+The final topic:
+
+### 9. **WeakMap vs. Map**
+
+In JavaScript, **WeakMap** and **Map** are both collections that hold key-value pairs, but they behave differently. Let's explore the differences.
+
+### 1. **WeakMap**
+- A **WeakMap** is similar to a Map, but its **keys** must be **objects** (no primitive values).
+- The keys in a **WeakMap** are **weakly referenced**. This means that if there are no other references to the object, the key-value pair will be **garbage collected**.
+- **WeakMaps** do not allow iteration. You cannot use `forEach`, `keys()`, `values()`, or `entries()` on a WeakMap.
+
+### 2. **Map**
+- A **Map** can have **both objects and primitive values** as keys.
+- **Maps** do not have the concept of weak references. The key-value pairs will persist in memory as long as the map exists.
+
+### Example of WeakMap:
+
+```javascript
+const weakMap = new WeakMap();
+
+const objKey1 = { name: 'Alice' };
+const objKey2 = { name: 'Bob' };
+
+weakMap.set(objKey1, 'Engineer');
+weakMap.set(objKey2, 'Doctor');
+
+console.log(weakMap.get(objKey1)); // 'Engineer'
+
+// weakMap.set(1, 'Test'); // Error: Invalid value used as weak map key
+
+// There is no iteration available
+// weakMap.forEach((value, key) => console.log(key, value)); // Error: weakMap.forEach is not a function
+```
+
+### Key Differences:
+- **WeakMap** only accepts objects as keys.
+- Keys in **WeakMap** are garbage collected when there are no other references to them.
+- **WeakMap** does not support iteration methods (no `.forEach`, `.keys()`, `.values()`, etc.).
+- **Map** can have any type of value (objects or primitives) as a key, and supports full iteration.
+
+### Use cases for WeakMap:
+- You can use a **WeakMap** to store metadata related to objects without preventing those objects from being garbage collected when they are no longer needed. This can be useful in scenarios where memory management is important.
+
+---
+
+### Exercise:
+
+Create a **WeakMap** to store user data (e.g., name and age) associated with different user objects. After that:
+
+1. Set two user objects as keys in the WeakMap, with their associated data as values.
+2. Try accessing the user data using the WeakMap's `get` method.
+3. Set one of the user objects to `null` (simulate removing the reference to that object).
+4. Check whether the data for the removed object still exists in the WeakMap.
+
+### Instructions:
+- **Hint 1**: After you set one of the user objects to `null`, the WeakMap should automatically clean up that key-value pair if there are no other references to the object.
+- **Hint 2**: You cannot iterate over a WeakMap, so you’ll only be able to access specific entries by key.
+
+Here's a template you can start with:
+
+```javascript
+const user1 = { name: 'Alice', age: 30 };
+const user2 = { name: 'Bob', age: 25 };
+
+const userMap = new WeakMap();
+
+userMap.set(user1, { name: 'Alice', age: 30 });
+userMap.set(user2, { name: 'Bob', age: 25 });
+
+console.log(userMap.get(user1)); // Should output Alice's data
+
+// Simulate removing reference to user1
+user1 = null;
+
+// After setting user1 to null, user1 should be garbage collected if no other references exist.
+console.log(userMap.get(user1)); // Should return undefined or nothing
+```
+
+---
+
+```js
+
+    let user1 = {'Bob': 22}
+    let user2 = {'Marla': 17}
+
+    const weakmap = new WeakMap()
+
+    weakmap.set(user1, 'Business owner')
+    weakmap.set(user2, 'Programmer')
+
+    const user1_info = weakmap.get(user1)
+    const user2_info = weakmap.get(user2)
+
+    console.log(user1_info)
+    console.log(user2_info)
+
+    user2 = null;
+
+    console.log(weakmap.has(user2))
+
+```
+
+#### notes:
+
+- WeakMap automatically clears entries when keys are no longer referenced, and you cannot directly delete an entry using a method like delete().
+
+- Map allows you to manually remove entries using delete(), but it doesn't automatically clear entries based on references.
